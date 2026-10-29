@@ -1,0 +1,36 @@
+{
+  "name": "employee-attendance-portal",
+  "version": "1.0.0",
+  "description": "Full-stack Employee Attendance and Leave Management Portal built with React.js, Node.js, Express, and PostgreSQL (Sequelize ORM).",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pratik-Patait/employee-attendance-portal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Pratik-Patait/employee-attendance-portal/issues"
+  },
+  "homepage": "https://github.com/Pratik-Patait/employee-attendance-portal#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "sequelize-cli": "^6.6.5"
+  }
+}
