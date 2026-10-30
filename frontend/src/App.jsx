@@ -1,38 +1,26 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
+import AttendancePage from './pages/AttendancePage';
+import TimesheetPage from './pages/TimesheetPage';
+import ApplyLeavePage from './pages/ApplyLeavePage';
+import LeaveApprovalPage from './pages/LeaveApprovalPage';
+import UserManagementPage from './pages/UserManagementPage';
+import LeaveConfigPage from './pages/LeaveConfigPage';
 
-// Layout wrapper for authenticated views
 const DashboardLayout = () => {
   return (
     <>
       <Navbar />
       <div className="page-container">
-        {/* Child route pages will render here */}
         <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
-          <OutletPlaceholder />
+          <Outlet />
         </div>
       </div>
     </>
-  );
-};
-
-// Placeholder component until we create pages in Module 7
-const OutletPlaceholder = () => {
-  const { user } = useAuth();
-  return (
-    <div>
-      <h2>Welcome, {user.full_name}</h2>
-      <p style={{ marginTop: '0.5rem', color: '#4b5563' }}>
-        You are authenticated with role: <strong>{user.role}</strong>.
-      </p>
-      <p style={{ marginTop: '0.5rem', color: '#6b7280' }}>
-        Module 6 Authentication, Axios Interceptors, and Role Routing verified. Proceeding to Module 7 for feature pages.
-      </p>
-    </div>
   );
 };
 
@@ -44,30 +32,38 @@ function App() {
           {/* Public Route */}
           <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected Routes */}
+          {/* All Authenticated Roles: Timesheet */}
           <Route element={<ProtectedRoute allowedRoles={['EMPLOYEE', 'MANAGER', 'HR']} />}>
-            <Route path="/" element={<DashboardLayout />} />
-            <Route path="/timesheet" element={<DashboardLayout />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/timesheet" element={<TimesheetPage />} />
+            </Route>
           </Route>
 
-          {/* Employee & Manager Routes */}
+          {/* Employee & Manager Routes: Attendance and Leave Application */}
           <Route element={<ProtectedRoute allowedRoles={['EMPLOYEE', 'MANAGER']} />}>
-            <Route path="/attendance" element={<DashboardLayout />} />
-            <Route path="/leave/apply" element={<DashboardLayout />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/attendance" element={<AttendancePage />} />
+              <Route path="/leave/apply" element={<ApplyLeavePage />} />
+            </Route>
           </Route>
 
-          {/* Manager Only Routes */}
+          {/* Manager Only: Leave Approvals */}
           <Route element={<ProtectedRoute allowedRoles={['MANAGER']} />}>
-            <Route path="/manager/approvals" element={<DashboardLayout />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/manager/approvals" element={<LeaveApprovalPage />} />
+            </Route>
           </Route>
 
-          {/* HR Only Routes */}
+          {/* HR Only: User & Leave Management */}
           <Route element={<ProtectedRoute allowedRoles={['HR']} />}>
-            <Route path="/hr/users" element={<DashboardLayout />} />
-            <Route path="/hr/leave-types" element={<DashboardLayout />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/hr/users" element={<UserManagementPage />} />
+              <Route path="/hr/leave-types" element={<LeaveConfigPage />} />
+            </Route>
           </Route>
 
-          {/* Fallback */}
+          {/* Root redirect */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
